@@ -5,9 +5,9 @@ const db = require("./db");
 const app = express();
 app.use(express.json());
 
+//user routes
 app.post("/users", (req, res) => {
   const { username } = req.body;
-
   if (!username) {
     return res.status(400).json({ error: "Username is required." });
   }
@@ -117,6 +117,32 @@ app.get("/channels", (req, res) => {
         .send("Error retrieving channels from the database.");
     }
     res.json(channels);
+  });
+});
+
+// Prenumerera på en kanal
+app.post("/channels/:id/subscribe", (req, res) => {
+  const { id } = req.params; // Kanalens ID
+  const { userID } = req.body; // Användarens ID
+  const query = "INSERT INTO Subscriptions (UserID, ChannelID) VALUES (?, ?)";
+  db.run(query, [userID, id], function (err) {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    res.status(201).send({ subscriptionID: this.lastID }); // Returnerar ID för den nya prenumerationen
+  });
+});
+
+// Avsluta prenumeration på en kanal
+app.post("/channels/:id/unsubscribe", (req, res) => {
+  const { id } = req.params; // Kanalens ID
+  const { userID } = req.body; // Användarens ID
+  const query = "DELETE FROM Subscriptions WHERE UserID = ? AND ChannelID = ?";
+  db.run(query, [userID, id], function (err) {
+    if (err) {
+      return res.status(500).send(err.message);
+    }
+    res.status(204).send(); // Returnerar 204 No Content för att indikera att borttagningen lyckades
   });
 });
 

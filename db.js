@@ -36,6 +36,7 @@ db.run(
         owner_id INTEGER
     )
 `,
+
   (err) => {
     if (err) {
       console.error("Error creating channels table:", err.message);
@@ -60,6 +61,26 @@ db.run(
       console.error("Error creating messages table:", err.message);
     } else {
       console.log("Messages table created successfully.");
+    }
+  }
+);
+
+// Create subscriptions table
+db.run(
+  `
+    CREATE TABLE IF NOT EXISTS subscriptions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        channel_id INTEGER,
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (channel_id) REFERENCES channels(id)
+    )
+`,
+  (err) => {
+    if (err) {
+      console.error("Error creating subscriptions table:", err.message);
+    } else {
+      console.log("Subscriptions table created successfully.");
     }
   }
 );

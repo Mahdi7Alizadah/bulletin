@@ -53,7 +53,8 @@ db.run(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         message_text TEXT,
         user_id INTEGER,
-        channel_id INTEGER
+        channel_id INTEGER,
+        timestamp TEXT 
     )
 `,
   (err) => {

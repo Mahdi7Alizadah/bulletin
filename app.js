@@ -73,7 +73,7 @@ app.post("/message", (req, res) => {
 
     // Check if the channel exists
     db.get(
-      "SELECT id FROM channels WHERE id = ?",
+      "SELECT id, owner_id FROM channels WHERE id = ?",
       [channelId],
       (err, channel) => {
         if (err) {
@@ -84,22 +84,45 @@ app.post("/message", (req, res) => {
           return res.status(404).send("Channel not found.");
         }
 
-        // Insert the message into the database
-        db.run(
+        // Check if the user is either the owner of the channel or subscribed to it
+        db.get(
           `
-                INSERT INTO messages (message_text, user_id, channel_id) VALUES (?, ?, ?)
-                `,
-          [message, userId, channelId],
-          (err) => {
+          SELECT 1 FROM channels
+          WHERE id = ? AND owner_id = ?
+          UNION
+          SELECT 1 FROM subscriptions
+          WHERE channel_id = ? AND user_id = ?
+        `,
+          [channelId, userId, channelId, userId],
+          (err, result) => {
             if (err) {
-              console.error("Error inserting message:", err.message);
-              return res
-                .status(500)
-                .send("Error inserting message into the database.");
-            } else {
-              console.log("Message inserted successfully.");
-              res.status(201).send("Message inserted successfully.");
+              console.error("Error checking permissions:", err.message);
+              return res.status(500).send("Error checking user permissions.");
             }
+            if (!result) {
+              return res
+                .status(403)
+                .send("User is not authorized to post in this channel.");
+            }
+
+            // Insert the message into the database
+            db.run(
+              `
+              INSERT INTO messages (message_text, user_id, channel_id) VALUES (?, ?, ?)
+            `,
+              [message, userId, channelId],
+              (err) => {
+                if (err) {
+                  console.error("Error inserting message:", err.message);
+                  return res
+                    .status(500)
+                    .send("Error inserting message into the database.");
+                } else {
+                  console.log("Message inserted successfully.");
+                  res.status(201).send("Message inserted successfully.");
+                }
+              }
+            );
           }
         );
       }
@@ -146,7 +169,4 @@ app.post("/channels/:id/unsubscribe", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;

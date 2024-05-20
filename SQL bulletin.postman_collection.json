@@ -1,0 +1,180 @@
+{
+  "info": {
+    "_postman_id": "ed726d17-bde5-41d9-9c13-f066adeceb17",
+    "name": "SQL bulletin",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25560766"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"Mahdi3\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["users"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Channel",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"AnotherTwo\",\r\n    \"ownerId\": \"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/channels",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["channels"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create A Message",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"message\": \"Hej!\",\r\n    \"userId\": \"1\",\r\n    \"channelId\": \"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/message",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["message"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Subscribe to a channel",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"channelId\": \"5\",\r\n    \"userId\": \"8\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/channels/subscribe",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["channels", "subscribe"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Subscription",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"channelId\": \"1\",\r\n    \"userId\": \"2\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/channels/unsubscribe",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["channels", "unsubscribe"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Messages Of A Channel",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"channelId\": \"2\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/channels/messages",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["channels", "messages"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All The Channels",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Get All The Users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/users",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["users"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
